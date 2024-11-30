@@ -77,20 +77,6 @@ DE-CRYPT IV
 5. **Exit**:
     - Exits the program.
 
-## Updates and Enhancements
-
-- **Embed Custom Messages**:
-  - Generate a randomized string and embed a readable message within it.
-
-- **Unified Outputs**:
-  - Displays generated strings, decrypted text, and their corresponding MIDI notes.
-
-- **Decrypted Text Saved**:
-  - Automatically saves the decrypted text to a `.txt` file with a filename derived from the text.
-
-- **Improved Random String Handling**:
-  - Fixed issues with subscripting keys for random string generation.
-
 ## Credits
 
 Written by deathsyrup  
