@@ -46,35 +46,6 @@ def load_scale_from_file(filename):
 def reverse_scale(scale):
     return {v: k for k, v in scale.items()}
 
-def create_cypher_from_midi(midi_file, output_cypher_file):
-    try:
-        mid = MidiFile(midi_file)
-        midi_notes = set()
-        for track in mid.tracks:
-            for msg in track:
-                if msg.type == 'note_on' and msg.velocity > 0:
-                    midi_notes.add(msg.note)
-        
-        midi_notes = sorted(midi_notes)
-        
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        cypher_map = {}
-        for i, note in enumerate(midi_notes):
-            if i < len(alphabet):  
-                cypher_map[alphabet[i]] = note
-            else:
-                break
-
-        with open(output_cypher_file, 'w') as file:
-            for char, note in cypher_map.items():
-                file.write(f"{char}: {note}\n")
-
-        print(f"Cypher created successfully and saved to '{output_cypher_file}'.")
-    except FileNotFoundError:
-        print(f"Error: MIDI file '{midi_file}' not found.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
 def text_to_midi_notes(text, scale, base_root_note=60):
     return [base_root_note + scale[char.upper()] for char in text if char.upper() in scale]
 
@@ -168,6 +139,35 @@ def get_root_note_name(midi_note):
         if note == midi_note:
             return name
     return "Unknown"
+
+def create_cypher_from_midi(midi_file, output_cypher_file):
+    try:
+        mid = MidiFile(midi_file)
+        midi_notes = set()
+        for track in mid.tracks:
+            for msg in track:
+                if msg.type == 'note_on' and msg.velocity > 0:
+                    midi_notes.add(msg.note)
+        
+        midi_notes = sorted(midi_notes)
+        
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        cypher_map = {}
+        for i, note in enumerate(midi_notes):
+            if i < len(alphabet):  
+                cypher_map[alphabet[i]] = note
+            else:
+                break
+
+        with open(output_cypher_file, 'w') as file:
+            for char, note in cypher_map.items():
+                file.write(f"{char}: {note}\n")
+
+        print(f"Cypher created successfully and saved to '{output_cypher_file}'.")
+    except FileNotFoundError:
+        print(f"Error: MIDI file '{midi_file}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     while True:
