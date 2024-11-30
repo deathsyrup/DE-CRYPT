@@ -42,7 +42,7 @@ DE-CRYPT IV
 
 - **View Current Cypher Map**:
     - Displays the loaded cypher file name.
-    - Shows the active root note (frequency).
+    - Shows the active root note.
     - Lists the character-to-interval and MIDI note mappings.
 
 - **Create Cypher from MIDI**:
