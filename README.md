@@ -1,8 +1,8 @@
-# DE-CRYPT_IV
+# DE-CRYPT_4.4
 
-DE-CRYPT IV
+DE-CRYPT 4.4
 
-    - DE-CRYPT IV converts text to MIDI notes and back using customizable cypher mappings, 
+    - DE-CRYPT 4.4 converts text to MIDI notes and back using customizable cypher mappings, 
       allowing encryption, decryption, random MIDI generation, and dynamic settings adjustment. -
 
 ## Features

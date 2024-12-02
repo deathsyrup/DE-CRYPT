@@ -193,7 +193,7 @@ def main():
     midi_handler = MIDIHandler()
 
     while True:
-        print("\nDE-CRYPT IV:")
+        print("\nDE-CRYPT 4.4:")
         print("1. Generate Randomized MIDI File")
         print("2. Encrypt Text to MIDI")
         print("3. Decrypt MIDI to Text")
