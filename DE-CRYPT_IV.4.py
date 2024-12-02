@@ -56,8 +56,9 @@ class MIDIHandler:
             print(f"Error: MIDI file '{filename}' not found.")
             return "", []
 
-    def create_midi_file(self, notes, filename):
+    def create_midi_file(self, notes, filename_base):
         try:
+            filename = Utils.get_sequential_filename(filename_base, ".mid")
             mid = MidiFile()
             track = MidiTrack()
             mid.tracks.append(track)
@@ -65,8 +66,9 @@ class MIDIHandler:
                 track.append(Message('note_on', note=note, velocity=32, time=self.note_on_time))
                 track.append(Message('note_off', note=note, velocity=32, time=self.note_off_time))
             mid.save(filename)
+            print(f"MIDI file '{filename}' created.")
         except Exception as e:
-            print(f"Error creating MIDI file '{filename}': {e}")
+            print(f"Error creating MIDI file: {e}")
 
     def create_cypher_from_midi(self, midi_file, output_cypher_file):
         try:
@@ -95,6 +97,16 @@ class Utils:
     def truncate_filename(filename, extension):
         base_length = Utils.MAX_FILENAME_LENGTH - len(extension)
         return (filename[:base_length] if len(filename) > base_length else filename) + extension
+
+    @staticmethod
+    def get_sequential_filename(base_name, extension):
+        """Generates a unique sequential filename."""
+        if not os.path.exists(f"{base_name}{extension}"):
+            return f"{base_name}{extension}"
+        counter = 1
+        while os.path.exists(f"{base_name}_{counter}{extension}"):
+            counter += 1
+        return f"{base_name}_{counter}{extension}"
 
     @staticmethod
     def generate_random_string(length, valid_chars):
@@ -132,7 +144,7 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
         print(f"4. Change Root Note (Current: {cypher_handler.base_root_note})")
         print(f"5. Change Note-On Time (Current: {midi_handler.note_on_time})")
         print(f"6. Change Note-Off Time (Current: {midi_handler.note_off_time})")
-        print("7. Return")
+        print("7. Return to Main Menu")
         setting_choice = input("Enter your choice: ").strip()
 
         if setting_choice == "1":
@@ -149,7 +161,7 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
             cypher_handler.filename = filename
             cypher_handler.scale = cypher_handler.load_scale_from_file()
         elif setting_choice == "4":
-            print("\nAvailable Root Notes:")
+            print("\nAvailable:")
             for name, note in root_notes.items():
                 print(f"{name} (MIDI: {note})")
             user_input = input("Enter a root note name (e.g., C4) or MIDI number (0-127): ").strip()
@@ -159,12 +171,12 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
                     cypher_handler.base_root_note = midi_number
                     print(f"Root note set to MIDI {midi_number}.")
                 else:
-                    print("Invalid MIDI number. Must be between 0 and 127.")
+                    print("Invalid MIDI. Must be between 0 and 127.")
             elif user_input.upper() in root_notes:
                 cypher_handler.base_root_note = root_notes[user_input.upper()]
                 print(f"Root note set to {user_input.upper()}.")
             else:
-                print("Invalid root note.")
+                print("Invalid.")
         elif setting_choice == "5":
             midi_handler.note_on_time = int(input("Enter new Note-On time: ").strip())
         elif setting_choice == "6":
@@ -172,7 +184,7 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
         elif setting_choice == "7":
             break
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice.")
 
 
 def main():
@@ -192,27 +204,29 @@ def main():
 
         if choice == "1":
             if not cypher_handler.scale:
-                print("No cypher loaded. Please load a cypher first.")
+                print("No cypher loaded.")
                 continue
 
-            print("\n1. Generate a completely random string")
+            print("\n1. Generate a random string")
             print("2. Input a custom message to embed")
             sub_choice = input("Enter your choice (1 or 2): ").strip()
 
             if sub_choice == "1":
-                length = int(input("Enter the length of the random string: "))
+                length = int(input("Enter the length of the string: "))
                 valid_chars = list(cypher_handler.scale.keys())
                 random_string = Utils.generate_random_string(length, valid_chars)
             elif sub_choice == "2":
-                length = int(input("Enter the total length of the string: "))
+                length = int(input("Enter the length of the string: "))
                 message = input("Enter the message to embed: ").strip()
                 if len(message) > length:
                     print("Error: The message is longer than the total string length.")
                     continue
 
                 padding_length = length - len(message)
-                left_padding = random.randint(0, padding_length)
+                left_padding = padding_length // 2 + random.randint(-1, 1)
                 right_padding = padding_length - left_padding
+#                left_padding = random.randint(0, padding_length)
+#                right_padding = padding_length - left_padding
 
                 valid_chars = list(cypher_handler.scale.keys())
                 left_padding_str = Utils.generate_random_string(left_padding, valid_chars)
@@ -224,9 +238,7 @@ def main():
                 continue
 
             midi_notes = midi_handler.text_to_midi_notes(random_string, cypher_handler.scale)
-            filename = Utils.truncate_filename("generated", ".mid")
-            midi_handler.create_midi_file(midi_notes, filename)
-            print(f"MIDI file '{filename}' created.")
+            midi_handler.create_midi_file(midi_notes, "generated")
             print(f"Generated String: {random_string}")
             print(f"Corresponding MIDI Notes: {midi_notes}")
 
@@ -246,9 +258,7 @@ def main():
                 print("Invalid choice.")
                 continue
             midi_notes = midi_handler.text_to_midi_notes(text, cypher_handler.scale)
-            filename = Utils.truncate_filename("output", ".mid")
-            midi_handler.create_midi_file(midi_notes, filename)
-            print(f"MIDI file '{filename}' created.")
+            midi_handler.create_midi_file(midi_notes, "output")
             print(f"Input Text: {text}")
             print(f"Corresponding MIDI Notes: {midi_notes}")
 
@@ -256,8 +266,8 @@ def main():
             file = input("Enter the MIDI file path: ").strip()
             decrypted_text, midi_notes = midi_handler.midi_to_text(file, cypher_handler.scale)
             if decrypted_text:
-                truncated_text = decrypted_text[:Utils.MAX_FILENAME_LENGTH]
-                output_filename = Utils.truncate_filename(truncated_text, ".txt")
+                output_filename_base = decrypted_text[:Utils.MAX_FILENAME_LENGTH]
+                output_filename = Utils.get_sequential_filename(output_filename_base, ".txt")
                 with open(output_filename, 'w') as file:
                     file.write(decrypted_text)
                 print(f"Decrypted Text: {decrypted_text}")
@@ -270,11 +280,10 @@ def main():
             settings_menu(cypher_handler, midi_handler, root_notes)
 
         elif choice == "5":
-            print("Exiting.")
             break
 
         else:
-            print("Invalid choice. Try again.")
+            print("Invalid choice.")
 
 
 if __name__ == "__main__":
