@@ -90,7 +90,7 @@ Settings and Configuration:
     Return to Main Menu:
         Exit the settings menu and return to the main program.
 
-##Installation
+## Installation
 	
 	Prerequisites:
 		Install Python 3.8 or higher.
