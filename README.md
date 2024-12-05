@@ -95,7 +95,7 @@ Settings and Configuration:
 	Prerequisites:
 		Install Python 3.8 or higher.
 		Install required dependencies:
-			pip install mido
+		pip install mido
 
 ## Credits
 
