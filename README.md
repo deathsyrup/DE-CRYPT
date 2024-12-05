@@ -44,12 +44,12 @@ Settings and Configuration:
         Displays the plaintext and corresponding MIDI notes.
 
     Encrypt Text to MIDI:
-        Encrypt input text (via file or direct input) into MIDI.
+        Encrypt input text (via file or direct input) into MIDI file.
         Optionally apply the Vigenère cipher for added security.
         Displays the plaintext, ciphertext, and corresponding MIDI notes.
 
     Decrypt Text:
-        Decrypt a MIDI file or raw encrypted text.
+        Decrypt input text (via file or direct input) into a .txt file.
         Apply reverse Vigenère cipher if a keyword is set.
         Save the decrypted plaintext to a sequential .txt file.
 
@@ -59,7 +59,7 @@ Settings and Configuration:
     Exit:
         Quit the program.
 
-## Settings Menu:
+## Settings
 
     View Current Cypher Map:
         Display the current cypher file, root note, and character-to-MIDI mappings.
