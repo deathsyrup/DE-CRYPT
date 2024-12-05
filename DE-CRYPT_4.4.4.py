@@ -395,7 +395,7 @@ def main():
                 keyword = cypher_handler.get_keyword()
                 if keyword:
                     original_plaintext = vigenere_cipher.decrypt(decrypted_text, keyword)
-                    print(f"Original Plaintext (Pre-Keyword): {original_plaintext}")
+                    print(f"Text before applying Cypher Keyword: {original_plaintext}")
                 else:
                     original_plaintext = decrypted_text
                     print("No keyword set, original plaintext is the same as decrypted text.")
@@ -411,7 +411,7 @@ def main():
                 keyword = cypher_handler.get_keyword()
                 if keyword:
                     original_plaintext = vigenere_cipher.decrypt(text, keyword)
-                    print(f"Original Plaintext (Pre-Keyword): {original_plaintext}")
+                    print(f"Text before applying Cypher Keyword: {original_plaintext}")
                 else:
                     original_plaintext = text
                     print("No keyword set, original plaintext is the same as input text.")
