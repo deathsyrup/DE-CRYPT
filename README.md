@@ -90,6 +90,13 @@ Settings and Configuration:
     Return to Main Menu:
         Exit the settings menu and return to the main program.
 
+##Installation
+	
+	Prerequisites:
+		Install Python 3.8 or higher.
+		Install required dependencies:
+			pip install mido
+
 ## Credits
 
 Written by deathsyrup  
