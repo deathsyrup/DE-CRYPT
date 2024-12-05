@@ -48,10 +48,14 @@ class CypherHandler:
         return self.keyword
 
 class MIDIHandler:
-    def __init__(self, base_root_note=60, note_on_time=0, note_off_time=480):
-        self.base_root_note = base_root_note
+    def __init__(self, cypher_handler, note_on_time=0, note_off_time=480):
+        self.cypher_handler = cypher_handler
         self.note_on_time = note_on_time
         self.note_off_time = note_off_time
+
+    @property
+    def base_root_note(self):
+        return self.cypher_handler.base_root_note
 
     def text_to_midi_notes(self, text, scale):
         return [self.base_root_note + scale[char.upper()] for char in text if char.upper() in scale]
@@ -286,7 +290,7 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
 def main():
     root_notes = generate_root_notes()
     cypher_handler = CypherHandler()
-    midi_handler = MIDIHandler()
+    midi_handler = MIDIHandler(cypher_handler)  # Link to CypherHandler
     vigenere_cipher = VigenereCipher()
 
     while True:
@@ -312,12 +316,12 @@ def main():
                 length = int(input("Enter the length of the string: "))
                 valid_chars = list(cypher_handler.scale.keys())
                 random_string = Utils.generate_random_string(length, valid_chars)
-                print(f"Generated Random String (Plaintext): {random_string}")
+                print(f"Generated Random String: {random_string}")
 
                 keyword = cypher_handler.get_keyword()
                 if keyword:
                     random_string = vigenere_cipher.encrypt(random_string, keyword)
-                    print(f"Encrypted Random String: {random_string}")
+                    print(f"Random String after applying Cypher Keyword: {random_string}")
 
             elif sub_choice == "2":
                 length = int(input("Enter the length of the string: "))
@@ -335,12 +339,12 @@ def main():
                 right_padding_str = Utils.generate_random_string(right_padding, valid_chars)
 
                 random_string = f"{left_padding_str}{message}{right_padding_str}"
-                print(f"Generated String with Message (Plaintext): {random_string}")
+                print(f"Generated String with Text: {random_string}")
 
                 keyword = cypher_handler.get_keyword()
                 if keyword:
                     random_string = vigenere_cipher.encrypt(random_string, keyword)
-                    print(f"Encrypted String with Message: {random_string}")
+                    print(f"Text after applying Cypher Keyword: {random_string}")
             else:
                 print("Invalid choice.")
                 continue
@@ -367,12 +371,12 @@ def main():
                 print("Invalid choice.")
                 continue
 
-            print(f"Plaintext before encryption: {text}")
+            print(f"Text before encryption: {text}")
 
             keyword = cypher_handler.get_keyword()
             if keyword:
                 text = vigenere_cipher.encrypt(text, keyword)
-                print(f"Cyphertext after applying Cypher Keyword: {text}")
+                print(f"Text after applying Cypher Keyword: {text}")
 
             midi_notes = midi_handler.text_to_midi_notes(text, cypher_handler.scale)
             midi_handler.create_midi_file(midi_notes, "output")
