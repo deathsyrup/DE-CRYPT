@@ -290,7 +290,7 @@ def main():
     vigenere_cipher = VigenereCipher()
 
     while True:
-        print("\nDE-CRYPT 4.4.1:")
+        print("\nDE-CRYPT 4.4.4:")
         print("1. Generate Randomized MIDI File")
         print("2. Encrypt Text")
         print("3. Decrypt Text")
