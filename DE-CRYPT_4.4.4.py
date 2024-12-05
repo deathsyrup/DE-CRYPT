@@ -372,7 +372,7 @@ def main():
             keyword = cypher_handler.get_keyword()
             if keyword:
                 text = vigenere_cipher.encrypt(text, keyword)
-                print(f"Cyphertext after applying Vigenere Cypher: {text}")
+                print(f"Cyphertext after applying Cypher Keyword: {text}")
 
             midi_notes = midi_handler.text_to_midi_notes(text, cypher_handler.scale)
             midi_handler.create_midi_file(midi_notes, "output")
@@ -391,7 +391,7 @@ def main():
                 keyword = cypher_handler.get_keyword()
                 if keyword:
                     original_plaintext = vigenere_cipher.decrypt(decrypted_text, keyword)
-                    print(f"Original Plaintext (Pre-Vigenere): {original_plaintext}")
+                    print(f"Original Plaintext (Pre-Keyword): {original_plaintext}")
                 else:
                     original_plaintext = decrypted_text
                     print("No keyword set, original plaintext is the same as decrypted text.")
@@ -407,7 +407,7 @@ def main():
                 keyword = cypher_handler.get_keyword()
                 if keyword:
                     original_plaintext = vigenere_cipher.decrypt(text, keyword)
-                    print(f"Original Plaintext (Pre-Vigenere): {original_plaintext}")
+                    print(f"Original Plaintext (Pre-Keyword): {original_plaintext}")
                 else:
                     original_plaintext = text
                     print("No keyword set, original plaintext is the same as input text.")
