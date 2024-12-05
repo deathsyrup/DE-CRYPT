@@ -11,8 +11,8 @@ DE-CRYPT 4.4.1
         Map alphabetic characters to MIDI notes using existing MIDI files or pre-defined mappings.
         Save and load cypher files for reuse.
 
-    Vigenère Cipher Integration:
-        Enhance security with optional Vigenère cipher encryption.
+    Vigenère Cypher Integration:
+        Enhance security with optional Vigenère cypher encryption.
         Manage keywords via a keyword.txt file, with automatic updates.
 
     Text Encryption and Decryption:
@@ -26,7 +26,7 @@ Advanced MIDI Functionality:
         Save the result as a MIDI file.
 
     Keyword MIDI File:
-        Generate a MIDI file based on the current Vigenère cipher keyword for reference.
+        Generate a MIDI file based on the current Vigenère cypher keyword for reference.
 
 Settings and Configuration:
 
@@ -45,12 +45,12 @@ Settings and Configuration:
 
     Encrypt Text to MIDI:
         Encrypt input text (via file or direct input) into MIDI file.
-        Optionally apply the Vigenère cipher for added security.
-        Displays the plaintext, ciphertext, and corresponding MIDI notes.
+        Optionally apply the Vigenère cypher for added security.
+        Displays the plaintext, cyphertext, and corresponding MIDI notes.
 
     Decrypt Text:
         Decrypt input text (via file or direct input) into a .txt file.
-        Apply reverse Vigenère cipher if a keyword is set.
+        Apply reverse Vigenère cypher if a keyword is set.
         Save the decrypted plaintext to a sequential .txt file.
 
     Settings:
@@ -70,8 +70,8 @@ Settings and Configuration:
     Change Cypher File:
         Load a new cypher file to update the character-to-MIDI mapping.
 
-    Set Vigenère Cipher Keyword:
-        Update the keyword for Vigenère cipher encryption.
+    Set Vigenère Cypher Keyword:
+        Update the keyword for Vigenère cypher encryption.
         Automatically updates the keyword.txt file.
 
     Create Cypher from MIDI:
@@ -79,7 +79,7 @@ Settings and Configuration:
         Map unique MIDI notes to the alphabet (A-Z) and save the result.
 
     Generate Keyword MIDI File:
-        Create a MIDI file based on the Vigenère cipher keyword.
+        Create a MIDI file based on the Vigenère cypher keyword.
 
     Change Note-On Time:
         Adjust the duration of MIDI "note-on" events.
