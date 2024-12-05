@@ -197,6 +197,17 @@ class Utils:
     def generate_random_string(length, valid_chars):
         return ''.join(random.choice(valid_chars) for _ in range(length))
 
+    @staticmethod
+    def read_text_from_file(filepath):
+        try:
+            with open(filepath, 'r') as file:
+                return file.read()
+        except FileNotFoundError:
+            print(f"Error: File '{filepath}' not found.")
+            return ""
+        except Exception as e:
+            print(f"Error reading file '{filepath}': {e}")
+
 def generate_root_notes():
     note_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
     root_notes = {}
