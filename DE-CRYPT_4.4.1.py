@@ -176,7 +176,6 @@ class VigenereCipher:
 
         return ''.join(plaintext)
 
-
 class Utils:
     MAX_FILENAME_LENGTH = 32
 
@@ -197,7 +196,6 @@ class Utils:
     @staticmethod
     def generate_random_string(length, valid_chars):
         return ''.join(random.choice(valid_chars) for _ in range(length))
-
 
 def generate_root_notes():
     note_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -273,8 +271,6 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
             break
         else:
             print("Invalid choice.")
-
-
 
 def main():
     root_notes = generate_root_notes()
