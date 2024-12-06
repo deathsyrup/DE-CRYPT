@@ -1,104 +1,103 @@
-# DE-CRYPT_4.4.4
+##DE-CRYPT 4.7
 
-DE-CRYPT 4.4.4
+DE-CRYPT 4.7 converts text to MIDI notes and back using customizable cypher mappings. It offers encryption, decryption, randomized MIDI generation, and dynamic configuration.
 
-    - DE-CRYPT 4.4.4 converts text to MIDI notes and back using customizable cypher mappings, 
-      allowing encryption, decryption, random MIDI generation, and dynamic settings adjustment. -
+Key Features
+Customizable Cypher Maps
 
-## Features
+    Map characters to MIDI notes using pre-defined mappings or generate them from MIDI files.
+    Save and load cypher maps for reuse and consistency.
 
-    Customizable Cypher Maps:
-        Map alphabetic characters to MIDI notes using existing MIDI files or pre-defined mappings.
-        Save and load cypher files for reuse.
+Vigenère Cypher Integration
 
-    Vigenère Cypher Integration:
-        Enhance security with optional Vigenère cypher encryption.
-        Manage keywords via a keyword.txt file, with automatic updates.
+    Add an extra layer of encryption with Vigenère cypher.
+    Manage and update keywords dynamically via a keyword.txt file.
 
-    Text Encryption and Decryption:
-        Encrypt text into MIDI files or decrypt MIDI files back into text.
-        Sequential naming ensures no files are accidentally overwritten.
+Text Encryption and Decryption
 
-Advanced MIDI Functionality:
+    Encrypt text into MIDI files or decrypt MIDI files back into text.
+    Ensures sequential file naming to prevent overwrites.
 
-    Generate Randomized MIDI Files:
+Advanced MIDI Functionality
+
+    Random MIDI Generation:
         Create random text strings or embed custom messages with adjustable padding.
-        Save the result as a MIDI file.
+        Export as MIDI files.
+    Keyword MIDI File Generation:
+        Generate MIDI files based on the current Vigenère cypher keyword for easy reference.
 
-    Keyword MIDI File:
-        Generate a MIDI file based on the current Vigenère cypher keyword for reference.
-
-Settings and Configuration:
+Settings and Configuration
 
     Dynamic Root Note Selection:
         Choose any MIDI note (0-127) as the root note (e.g., C4, A#3).
-
     Adjustable MIDI Timings:
-        Customize MIDI note-on and note-off durations.
+        Customize "note-on" and "note-off" durations for tailored playback.
+    Unified Alphabet Management:
+        Set and reset the alphabet dynamically to support additional characters and custom needs.
 
-## Menu Options
+Main Menu Options
 
-    Generate Randomized MIDI File:
-        Create a random text string or embed a message with padding.
-        Encrypt the result to MIDI using the cypher map and save it.
-        Displays the plaintext and corresponding MIDI notes.
+    Generate Randomized MIDI File
+        Create a random text string or embed a message.
+        Convert the result to MIDI using the active cypher map.
+        Save the output and display the plaintext and MIDI notes.
 
-    Encrypt Text to MIDI:
-        Encrypt input text (via file or direct input) into MIDI file.
-        Optionally apply the Vigenère cypher for added security.
-        Displays the plaintext, cyphertext, and corresponding MIDI notes.
+    Encrypt Text to MIDI
+        Encrypt input text (via direct input or file) into a MIDI file.
+        Optionally apply the Vigenère cypher for enhanced security.
+        View plaintext, cyphertext, and MIDI note mappings.
 
-    Decrypt Text:
-        Decrypt input text (via file or direct input) into a .txt file.
+    Decrypt MIDI to Text
+        Decrypt MIDI files into plaintext (direct input or file).
         Apply reverse Vigenère cypher if a keyword is set.
-        Save the decrypted plaintext to a sequential .txt file.
+        Save decrypted text to a file.
 
-    Settings:
-        Configure cypher files, keywords, MIDI timings, and more.
+    Settings
+        Access configuration options for cypher files, keywords, MIDI timings, and more.
 
-    Exit:
+    Exit
         Quit the program.
 
-## Settings
+Settings Menu Options
 
-    View Current Cypher Map:
-        Display the current cypher file, root note, and character-to-MIDI mappings.
+    Change Library
+        View the current library and optionally update it with a custom set of characters.
 
-    Change Root Note:
-        Update the root note using any MIDI note (0-127).
+    Change Root Note
+        Select a new root note using any MIDI note (0-127).
 
-    Change Cypher File:
-        Load a new cypher file to update the character-to-MIDI mapping.
+    Change Cypher File
+        Load a new cypher file to update character-to-MIDI mappings.
 
-    Set Vigenère Cypher Keyword:
-        Update the keyword for Vigenère cypher encryption.
-        Automatically updates the keyword.txt file.
+    Set Vigenère Cypher Keyword
+        Define or update the keyword for Vigenère cypher encryption.
+        Automatically syncs with the keyword.txt file.
 
-    Create Cypher from MIDI:
-        Generate a cypher mapping from a MIDI file.
-        Map unique MIDI notes to the alphabet (A-Z) and save the result.
+    Create Cypher from MIDI
+        Generate a cypher map by mapping unique MIDI notes from a file to the character list.
+        Save the generated map for reuse.
 
-    Generate Keyword MIDI File:
-        Create a MIDI file based on the Vigenère cypher keyword.
+    Generate Keyword MIDI File
+        Create a MIDI file representing the Vigenère cypher keyword.
 
-    Change Note-On Time:
-        Adjust the duration of MIDI "note-on" events.
+    Change Note-On Time
+        Adjust the "note-on" duration for MIDI playback.
 
-    Change Note-Off Time:
-        Adjust the duration of MIDI "note-off" events.
+    Change Note-Off Time
+        Adjust the "note-off" duration for MIDI playback.
 
-    Return to Main Menu:
-        Exit the settings menu and return to the main program.
+    View Current Cypher Map
+        Display the current cypher map, root note, and character-to-MIDI mappings.
 
-## Installation
-	
-	Prerequisites:
-		Install Python 3.8 or higher.
-	Install required dependencies:
-		pip install mido
 
-## Credits
+    Return
 
-Written by deathsyrup  
-https://1deathsyrup.bandcamp.com/  
-https://www.twitch.tv/1deathsyrup/
+    Exit the settings menu and return to the main program.
+
+Installation
+
+    Prerequisites:
+        Python 3.8 or higher is required.
+
+    Install Dependencies:
+        Run: pip install mido

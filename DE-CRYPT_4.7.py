@@ -2,8 +2,27 @@ import os
 import random
 from mido import Message, MidiFile, MidiTrack
 
+class AlphabetManager:
+    def __init__(self, default_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"):
+        self.alphabet = default_alphabet
+
+    def set_alphabet(self, new_alphabet):
+        """Update the alphabet dynamically."""
+        self.alphabet = new_alphabet.upper()
+        print(f"Library updated to: {self.alphabet}")
+
+    def reset_alphabet(self, default_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"):
+        """Reset the alphabet to its default."""
+        self.alphabet = default_alphabet
+        print("Library reset to default.")
+
+    def get_alphabet(self):
+        """Get the current alphabet."""
+        return self.alphabet
+
 class CypherHandler:
-    def __init__(self, filename="default_cypher.txt", base_root_note=60, keyword_file="keyword.txt"):
+    def __init__(self, alphabet_manager, filename="default_cypher.txt", base_root_note=60, keyword_file="keyword.txt"):
+        self.alphabet_manager = alphabet_manager
         self.filename = filename
         self.base_root_note = base_root_note
         self.scale = self.load_scale_from_file()
@@ -11,14 +30,20 @@ class CypherHandler:
         self.keyword = self.load_keyword_from_file()
 
     def load_scale_from_file(self):
+        """Load the mapping from a file and update the alphabet."""
         try:
-            with open(self.filename, 'r') as file:
+            with open(self.filename, 'r', encoding='utf-8') as file:
                 scale = {
                     char.strip(): int(value.strip())
                     for line in file if ':' in line
                     for char, value in [line.split(':', 1)]
                 }
                 print(f"Cypher loaded successfully from '{self.filename}'.")
+            
+                # Update the alphabet in AlphabetManager
+                new_alphabet = ''.join(scale.keys())
+                self.alphabet_manager.set_alphabet(new_alphabet)
+            
                 return scale
         except FileNotFoundError:
             print(f"Error: Cypher file '{self.filename}' not found.")
@@ -48,8 +73,9 @@ class CypherHandler:
         return self.keyword
 
 class MIDIHandler:
-    def __init__(self, cypher_handler, note_on_time=0, note_off_time=480):
+    def __init__(self, cypher_handler, alphabet_manager, note_on_time=0, note_off_time=480):
         self.cypher_handler = cypher_handler
+        self.alphabet_manager = alphabet_manager
         self.note_on_time = note_on_time
         self.note_off_time = note_off_time
 
@@ -93,15 +119,23 @@ class MIDIHandler:
             print(f"Error creating MIDI file: {e}")
 
     def create_cypher_from_midi(self, midi_file, output_cypher_file):
+        """Create a cypher map based on MIDI notes."""
         try:
             mid = MidiFile(midi_file)
             midi_notes = {msg.note for track in mid.tracks for msg in track if msg.type == 'note_on' and msg.velocity > 0}
             midi_notes = sorted(midi_notes)
 
-            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            # Get the current alphabet
+            if not hasattr(self, 'alphabet_manager') or not callable(getattr(self.alphabet_manager, 'get_alphabet', None)):
+                print("Error: AlphabetManager is not initialized or get_alphabet is not available.")
+                return
+
+            alphabet = self.alphabet_manager.get_alphabet()
+
+            # Map alphabet characters to MIDI notes
             cypher_map = {alphabet[i]: note for i, note in enumerate(midi_notes) if i < len(alphabet)}
 
-            with open(output_cypher_file, 'w') as file:
+            with open(output_cypher_file, 'w', encoding='utf-8') as file:
                 for char, note in cypher_map.items():
                     file.write(f"{char}: {note}\n")
 
@@ -109,7 +143,7 @@ class MIDIHandler:
         except FileNotFoundError:
             print(f"Error: MIDI file '{midi_file}' not found.")
         except Exception as e:
-            print(f"Error creating cypher: {e}")    
+            print(f"Error creating cypher: {e}")   
 
     def create_keyword_midi_file(self, keyword, scale, filename_base="keyword_midi"):
         if not keyword or not scale:
@@ -140,9 +174,9 @@ class MIDIHandler:
             print(f"Error creating keyword MIDI file: {e}")
 
 class VigenereCipher:
-    def __init__(self):
-        self.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        self.vigenere_square = self.generate_vigenere_square()
+    def __init__(self, alphabet_manager):
+        self.alphabet_manager = alphabet_manager
+        self.update_vigenere_square()
 
     def generate_vigenere_square(self):
         return [
@@ -151,6 +185,8 @@ class VigenereCipher:
         ]
 
     def encrypt(self, plaintext, keyword):
+        """Encrypt the plaintext using the current alphabet and keyword."""
+        self.update_vigenere_square()  # Ensure the square is up to date
         plaintext = plaintext.upper().replace(" ", "")
         keyword = (keyword * (len(plaintext) // len(keyword) + 1)).upper()
         ciphertext = []
@@ -161,11 +197,14 @@ class VigenereCipher:
                 col = self.alphabet.index(p)
                 ciphertext.append(self.vigenere_square[row][col])
             else:
+                # Leave characters not in the alphabet unchanged
                 ciphertext.append(p)
 
         return ''.join(ciphertext)
 
     def decrypt(self, ciphertext, keyword):
+        """Decrypt the ciphertext using the current alphabet and keyword."""
+        self.update_vigenere_square()  # Ensure the square is up to date
         ciphertext = ciphertext.upper().replace(" ", "")
         keyword = (keyword * (len(ciphertext) // len(keyword) + 1)).upper()
         plaintext = []
@@ -176,9 +215,18 @@ class VigenereCipher:
                 col = self.vigenere_square[row].index(c)
                 plaintext.append(self.alphabet[col])
             else:
+                # Leave characters not in the alphabet unchanged
                 plaintext.append(c)
 
         return ''.join(plaintext)
+
+    def update_vigenere_square(self):
+        """Regenerate the Vigenere square based on the current alphabet."""
+        self.alphabet = self.alphabet_manager.get_alphabet()
+        self.vigenere_square = [
+            self.alphabet[i:] + self.alphabet[:i]
+            for i in range(len(self.alphabet))
+        ]
 
 class Utils:
     MAX_FILENAME_LENGTH = 32
@@ -221,10 +269,10 @@ def generate_root_notes():
         root_notes[f"{note_name}{octave}"] = midi_note
     return root_notes
 
-def settings_menu(cypher_handler, midi_handler, root_notes):
+def settings_menu(cypher_handler, midi_handler, root_notes, alphabet_manager):
     while True:
         print("\nSettings:")
-        print("1. View Current Cypher Map")
+        print(f"1. Change Library")
         print(f"2. Change Root Note (Current: {cypher_handler.base_root_note})")
         print(f"3. Change Cypher File (Current: {cypher_handler.filename})")
         print(f"4. Change Cypher Keyword (Current: {cypher_handler.get_keyword() or 'None'})")
@@ -232,14 +280,20 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
         print("6. Create Keyword MIDI File")
         print(f"7. Change Note-On Time (Current: {midi_handler.note_on_time})")
         print(f"8. Change Note-Off Time (Current: {midi_handler.note_off_time})")
-        print("9. Return")
+        print("9. View Current Cypher Map")
+        print("0. Return")
         setting_choice = input("Enter your choice: ").strip()
 
         if setting_choice == "1":
-            print("\nCurrent Cypher Map:")
-            for char, interval in cypher_handler.scale.items():
-                midi_note = cypher_handler.base_root_note + interval
-                print(f"{char}: {interval} -> {midi_note}")
+            current_alphabet = alphabet_manager.get_alphabet()
+            print(f"\nCurrent Library: {current_alphabet}")
+            new_alphabet = input("Enter the new library list (or leave blank to keep current): ").strip()
+    
+            if new_alphabet:
+                alphabet_manager.set_alphabet(new_alphabet)
+                ##print(f"Library updated to: {new_alphabet}")
+            else:
+                print("Library unchanged.")
         elif setting_choice == "2":
             print("\nAvailable:")
             for name, note in root_notes.items():
@@ -283,18 +337,24 @@ def settings_menu(cypher_handler, midi_handler, root_notes):
         elif setting_choice == "8":
             midi_handler.note_off_time = int(input("Enter new Note-Off time: ").strip())
         elif setting_choice == "9":
+            print("\nCurrent Cypher Map:")
+            for char, interval in cypher_handler.scale.items():
+                midi_note = cypher_handler.base_root_note + interval
+                print(f"{char}: {interval} -> {midi_note}")
+        elif setting_choice == "0":
             break
         else:
             print("Invalid choice.")
 
 def main():
+    alphabet_manager = AlphabetManager()
     root_notes = generate_root_notes()
-    cypher_handler = CypherHandler()
-    midi_handler = MIDIHandler(cypher_handler)  # Link to CypherHandler
-    vigenere_cipher = VigenereCipher()
+    cypher_handler = CypherHandler(alphabet_manager)
+    midi_handler = MIDIHandler(cypher_handler, alphabet_manager)
+    vigenere_cipher = VigenereCipher(alphabet_manager)
 
     while True:
-        print("\nDE-CRYPT 4.4.4:")
+        print("\nDE-CRYPT 4.7:")
         print("1. Generate Randomized MIDI File")
         print("2. Encrypt Text")
         print("3. Decrypt Text")
@@ -424,7 +484,7 @@ def main():
                 print("Invalid choice.")
 
         elif choice == "4":
-            settings_menu(cypher_handler, midi_handler, root_notes)
+            settings_menu(cypher_handler, midi_handler, root_notes, alphabet_manager)
 
         elif choice == "5":
             break
