@@ -2,7 +2,8 @@
 
 DE-CRYPT 4.7 converts text to MIDI notes and back using customizable cypher mappings. It offers encryption, decryption, randomized MIDI generation, and dynamic configuration.
 
-Key Features
+## FEATURES
+
 Customizable Cypher Maps
 
     Map characters to MIDI notes using pre-defined mappings or generate them from MIDI files.
@@ -35,7 +36,7 @@ Settings and Configuration
     Unified Alphabet Management:
         Set and reset the alphabet dynamically to support additional characters and custom needs.
 
-Main Menu Options
+## MENU OPTIONS
 
     Generate Randomized MIDI File
         Create a random text string or embed a message.
@@ -58,7 +59,7 @@ Main Menu Options
     Exit
         Quit the program.
 
-Settings Menu Options
+## SETTINGS OPTIONS
 
     Change Library
         View the current library and optionally update it with a custom set of characters.
@@ -88,11 +89,6 @@ Settings Menu Options
 
     View Current Cypher Map
         Display the current cypher map, root note, and character-to-MIDI mappings.
-
-
-    Return
-
-    Exit the settings menu and return to the main program.
 
 Installation
 
