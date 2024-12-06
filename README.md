@@ -90,7 +90,7 @@ Settings and Configuration
     View Current Cypher Map
         Display the current cypher map, root note, and character-to-MIDI mappings.
 
-Installation
+## Installation
 
     Prerequisites:
         Python 3.8 or higher is required.
