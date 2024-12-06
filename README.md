@@ -11,7 +11,7 @@ Customizable Cypher Maps
 
 Vigenère Cypher Integration
 
-    Add an extra layer of encryption with Vigenère cypher.
+    Add an extra layer of encryption with a Vigenère cypher.
     Manage and update keywords dynamically via a keyword.txt file.
 
 Text Encryption and Decryption
@@ -70,7 +70,7 @@ Settings and Configuration
     Change Cypher File
         Load a new cypher file to update character-to-MIDI mappings.
 
-    Set Vigenère Cypher Keyword
+    Change Keyword
         Define or update the keyword for Vigenère cypher encryption.
         Automatically syncs with the keyword.txt file.
 
