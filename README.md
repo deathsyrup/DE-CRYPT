@@ -1,4 +1,4 @@
-##DE-CRYPT 4.7
+## DE-CRYPT 4.7
 
 DE-CRYPT 4.7 converts text to MIDI notes and back using customizable cypher mappings. It offers encryption, decryption, randomized MIDI generation, and dynamic configuration.
 
